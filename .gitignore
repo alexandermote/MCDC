@@ -51,4 +51,3 @@ pytestdebug.log
 docs/build
 docs/source/pythonapi/generated/
 
-*.csv
