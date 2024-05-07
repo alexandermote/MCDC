@@ -11,24 +11,15 @@ jobs:
     #        os: ["ubuntu-latest"]
     steps:
     - uses: actions/checkout@v3
-    - name: Set up python 3.11
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.11"
-    - name: debug
+    - name: Loads modules and activates conda debug
       run: |
         pwd
         ls
-    - uses: mpi4py/setup-mpi@v1
-    - name: Install dependencies
-      run: |
-        #sudo apt-get install libopenmpi-dev
-        #pip install numpy numba h5py matplotlib scipy pytest colorama mpi4py ngsolve distinctipy
-        pip list 
-        pip install -e .
-    - name: Patch Numba
-      run : |
-        bash .github/workflows/patch.sh
+        module load cuda/12 openmpi/4.0_gcc-103
+        conda create --name ghaction_temp python=3.11
+        conda activate ghaction_temp
+        which python
+        bash install.sh --hpc
     - name: Regression Test - Numba
       run: |
           cd test/regression
