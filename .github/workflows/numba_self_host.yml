@@ -35,6 +35,6 @@ jobs:
     - name: Regression Test - Numba
       run: |
           source ~/.bashrc
-          conda activate gh_action_temp
+          conda activate ghaction_temp
           cd test/regression
           python run.py --mode=numba
