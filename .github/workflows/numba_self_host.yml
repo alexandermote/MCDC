@@ -15,7 +15,7 @@ jobs:
       run: |
         pwd
         ls
-        module load cuda/12 openmpi/4.0_gcc-103
+        module load cuda/12 openmpi/4.0_gcc-10
         conda create --name ghaction_temp python=3.11
         conda activate ghaction_temp
         which python
