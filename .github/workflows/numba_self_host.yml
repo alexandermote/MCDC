@@ -21,8 +21,20 @@ jobs:
         conda activate ghaction_temp
         which python
         bash install.sh --hpc
+        nvidia-smi
+    - name: Debug
+      run: |
+        source ~/.bashrc
+        conda activate ghaction_temp
+        pwd
+        ls
+        lscpu
+        nvidia-smi
+        pip list
+        conda list
     - name: Regression Test - Numba
       run: |
+          source ~/.bashrc
           conda activate gh_action_temp
           cd test/regression
           python run.py --mode=numba
