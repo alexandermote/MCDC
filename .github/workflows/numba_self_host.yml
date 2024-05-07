@@ -23,5 +23,6 @@ jobs:
         bash install.sh --hpc
     - name: Regression Test - Numba
       run: |
+          conda activate gh_action_temp
           cd test/regression
           python run.py --mode=numba
