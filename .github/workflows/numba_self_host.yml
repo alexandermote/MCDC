@@ -22,6 +22,10 @@ jobs:
         which python
         pip install .
         bash patch_numba.sh
+        git clone https://github.com/CEMeNT-PSAAP/harmonize.git
+        cd harmonize
+        bash install.sh
+        cd ..
     - name: Debug
       run: |
         source ~/miniconda3/etc/profile.d/conda.sh
@@ -37,4 +41,4 @@ jobs:
         source ~/miniconda3/etc/profile.d/conda.sh
         conda activate ghaction_temp
         cd test/regression
-        python run.py --mode=numba
+        python run.py --mode=numba --mode=gpu
