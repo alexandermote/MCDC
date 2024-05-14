@@ -20,7 +20,8 @@ jobs:
         conda create --name ghaction_temp python=3.11
         conda activate ghaction_temp
         which python
-        bash install.sh --hpc
+        conda install conda-forge::mpi4py
+        bash install.sh
     - name: Debug
       run: |
         source ~/miniconda3/etc/profile.d/conda.sh
