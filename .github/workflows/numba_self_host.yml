@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: gpu
+    runs-on: jpm
     #strategy:
     #    fail-fast: false
     #    matrix:
@@ -15,7 +15,7 @@ jobs:
       run: |
         pwd
         ls
-        module load cuda/12 openmpi/4.0_gcc-10
+        #module load cuda/12 openmpi/4.0_gcc-10
         source ~/.bashrc
         conda create --name ghaction_temp python=3.11
         conda activate ghaction_temp
@@ -34,7 +34,7 @@ jobs:
         conda list
     - name: Regression Test - Numba
       run: |
-          source ~/.bashrc
-          conda activate ghaction_temp
-          cd test/regression
-          python run.py --mode=numba
+        source ~/.bashrc
+        conda activate ghaction_temp
+        cd test/regression
+        python run.py --mode=numba
