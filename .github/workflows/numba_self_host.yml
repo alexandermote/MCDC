@@ -16,14 +16,14 @@ jobs:
         pwd
         ls
         #module load cuda/12 openmpi/4.0_gcc-10
-        source ~/anaconda3/etc/profile.d/conda.sh
+        source ~/miniconda3/etc/profile.d/conda.sh
         conda create --name ghaction_temp python=3.11
         conda activate ghaction_temp
         which python
         bash install.sh --hpc
     - name: Debug
       run: |
-        source ~/anaconda3/etc/profile.d/conda.sh
+        source ~/miniconda3/etc/profile.d/conda.sh
         conda activate ghaction_temp
         pwd
         ls
@@ -33,7 +33,7 @@ jobs:
         conda list
     - name: Regression Test - Numba
       run: |
-        source ~/anaconda3/etc/profile.d/conda.sh
+        source ~/miniconda3/etc/profile.d/conda.sh
         conda activate ghaction_temp
         cd test/regression
         python run.py --mode=numba
