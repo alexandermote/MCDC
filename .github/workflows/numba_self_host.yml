@@ -23,7 +23,7 @@ jobs:
         bash install.sh --hpc
     - name: Debug
       run: |
-        source ~/.bashrc
+        source ~/anaconda3/etc/profile.d/conda.sh
         conda activate ghaction_temp
         pwd
         ls
@@ -33,7 +33,7 @@ jobs:
         conda list
     - name: Regression Test - Numba
       run: |
-        source ~/.bashrc
+        source ~/anaconda3/etc/profile.d/conda.sh
         conda activate ghaction_temp
         cd test/regression
         python run.py --mode=numba
