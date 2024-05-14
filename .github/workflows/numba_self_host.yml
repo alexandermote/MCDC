@@ -20,7 +20,7 @@ jobs:
         conda create --name ghaction_temp python=3.11
         conda activate ghaction_temp
         which python
-        conda install conda-forge::mpi4py
+        conda install conda-forge::mpi4py >> y
         bash install.sh
     - name: Debug
       run: |
