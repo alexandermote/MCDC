@@ -36,6 +36,14 @@ while [ $# -gt 0 ]; do
 
     --config_cont_lib)
       bash config_cont_energy.sh
+      ;;
+
+    --harmonize)
+      git clone https://github.com/CEMeNT-PSAAP/harmonize.git
+      cd harmonize
+      bash install.sh
+      cd ..
+
   ;;
   esac
   shift
