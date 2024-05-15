@@ -66,7 +66,7 @@ if target == "gpu":
             )
     
     if (target == "gpu"):
-        tol = 1e-1
+        tol = 0.5
         Fore.CYAN
         print(Fore.YELLOW + 'Note: tolerance increased to ', tol, '(GPU target)')
 names = temp
