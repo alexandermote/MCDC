@@ -62,6 +62,11 @@ if target == "gpu":
             print(
                 Fore.YELLOW + "Note: Skipping %s (GPU target)" % name + Style.RESET_ALL
             )
+    tol = 1e-9
+    if (target == "gpu"):
+        tol = 1e-6
+        Fore.CYAN
+        print(Fore.YELLOW + 'Note: tolerance increased to ', tol, '(GPU target)')
 names = temp
 
 # Data for each test
@@ -138,7 +143,7 @@ for i, name in enumerate(names):
             b = answer[result_name][:]
 
             # Passed?
-            if np.isclose(a, b).all():
+            if np.isclose(a, b, rtol=tol).all():
                 print(
                     Fore.GREEN
                     + "  {}: Passed".format(score + "/" + result)
