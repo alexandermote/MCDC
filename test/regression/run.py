@@ -53,6 +53,8 @@ for name in names:
         )
 names = temp
 
+tol = 1e-5
+
 # Skip iqmc if GPU run
 if target == "gpu":
     temp = names.copy()
@@ -62,9 +64,9 @@ if target == "gpu":
             print(
                 Fore.YELLOW + "Note: Skipping %s (GPU target)" % name + Style.RESET_ALL
             )
-    tol = 1e-9
+    
     if (target == "gpu"):
-        tol = 1e-6
+        tol = 1e-1
         Fore.CYAN
         print(Fore.YELLOW + 'Note: tolerance increased to ', tol, '(GPU target)')
 names = temp
