@@ -106,6 +106,7 @@ target = args.target
 gpu_state_storage = args.gpu_state_storage
 caching = args.caching
 clear_cache = args.clear_cache
+trace = args.trace
 
 from mpi4py import MPI
 import shutil
