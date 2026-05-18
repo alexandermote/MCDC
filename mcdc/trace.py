@@ -12,7 +12,7 @@ import numpy as np
 
 import mcdc.config as config
 
-from mcdc.transport.util import atomic_add
+#from mcdc.transport.util import atomic_add
 
 CACHE_PATH = "./__trace_cache__"
 
