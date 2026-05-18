@@ -2,6 +2,9 @@
 # Simulation building blocks
 # ======================================================================================
 
+# Function profiler
+import mcdc.trace
+
 # The simulation
 from mcdc.object_.simulation import simulation
 
