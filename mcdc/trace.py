@@ -12,7 +12,6 @@ import numpy as np
 
 import mcdc.config as config
 
-from mcdc.numba_types import trace_slot
 from mcdc.transport.util import atomic_add
 
 CACHE_PATH = "./__trace_cache__"
@@ -183,6 +182,7 @@ def njit(*args, **kwargs):
 
     return trace_njit_inner
 
+from mcdc.numba_types import trace_slot
 
 def output_report(mcdc):
     report = open("report.csv", "w")
