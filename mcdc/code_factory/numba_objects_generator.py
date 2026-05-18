@@ -17,8 +17,8 @@ import mcdc.code_factory.gpu.program_builder as gpu_builder
 import mcdc.config as config
 import mcdc.object_ as object_module
 import mcdc.object_.base as base
-import mcdc.trace as trace
 
+from mcdc.trace import njit
 from mcdc.object_.base import (
     ObjectBase,
     ObjectNonSingleton,
@@ -731,7 +731,7 @@ def create_data_array(size):
         return create_data_array_on_gpu(size * 8)
 
 
-@trace.njit()
+@njit()
 def create_data_array_on_gpu(size):
     if config.gpu_state_storage == "managed":
         data_ptr = gpu_builder.alloc_managed_bytes(size)
@@ -750,7 +750,7 @@ def create_simulation_container(dtype):
         return create_simulation_container_on_gpu(dtype, dtype.itemsize)
 
 
-@trace.njit()
+@njit()
 def create_simulation_container_on_gpu(dtype, size):
     if config.gpu_state_storage == "managed":
         simulation_ptr = gpu_builder.alloc_managed_bytes(size)
@@ -785,7 +785,7 @@ def cast_voidptr_to_uintp(typingctx, src):
         return sig, codegen
 
 
-@trace.njit()
+@njit()
 def voidptr_to_uintp(value):
     return cast_voidptr_to_uintp(value)
 
