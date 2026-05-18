@@ -1,6 +1,6 @@
-from numba import njit
 import numpy as np
 from mcdc.main import preparation
+import mcdc.trace as trace
 
 _visualize_cache = None
 
@@ -54,7 +54,7 @@ def visualize(
 
     from mcdc.transport.geometry.interface import locate_particle
 
-    @njit(cache=True)
+    @trace.njit(cache=True)
     def _compute_material_row(
         first_coord,
         second_midpoint,

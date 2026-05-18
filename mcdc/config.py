@@ -28,13 +28,14 @@ parser.add_argument("--output", type=str, help="Output file name")
 parser.add_argument("--progress_bar", default=True, action="store_true")
 parser.add_argument("--no-progress_bar", dest="progress_bar", action="store_false")
 parser.add_argument("--runtime_output", default=False, action="store_true")
+parser.add_argument("--trace", default=False, action="store_true")
 
 
 # ======================================================================================
 # Numba
 # ======================================================================================
 
-parser.add_argument("--clear_cache", action="store_true")
+parser.add_argument("--clear_cache", action="store_true")""
 parser.add_argument("--caching", action="store_true", default=False)
 parser.add_argument("--no_caching", dest="caching", action="store_false")
 

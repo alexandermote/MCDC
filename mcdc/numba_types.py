@@ -710,6 +710,19 @@ gpu_meta = into_dtype([
     ('data_pointer', uintp),
 ])
 
+trace_slot = into_dtype([
+    ("runtime_total", int64, (3,)),
+    ("call_total", int64, (3,)),
+])
+
+trace = None
+def set_trace(trace_slot_limit: int64):
+    global trace
+    trace = into_dtype([
+        ("slots", trace_slot, trace_slot_limit),
+        ("slot_limit", int64),
+    ])
+
 bank_active = None
 def set_bank_active(N: dict):
     global bank_active
@@ -884,5 +897,6 @@ def set_simulation(N: dict):
         ('runtime_output', float64),
         ('runtime_bank_management', float64),
         ('source_seed', int64),
+        ('trace', trace)
     ])
 

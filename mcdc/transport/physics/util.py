@@ -1,15 +1,14 @@
 import math
 
-from numba import njit
-
 ####
 
 import mcdc.mcdc_get as mcdc_get
+import mcdc.trace as trace
 
 from mcdc.transport.util import find_bin
 
 
-@njit
+@trace.njit()
 def evaluate_neutron_xs_energy_grid(e, nuclide, data):
     offset = nuclide["neutron_xs_energy_grid_offset"]
     length = nuclide["neutron_xs_energy_grid_length"]
@@ -22,7 +21,7 @@ def evaluate_neutron_xs_energy_grid(e, nuclide, data):
     return idx, e0, e1
 
 
-@njit
+@trace.njit()
 def evaluate_electron_xs_energy_grid(e, element, data):
     energy_grid = mcdc_get.element.electron_xs_energy_grid_all(element, data)
     idx = find_bin(e, energy_grid)
@@ -31,7 +30,7 @@ def evaluate_electron_xs_energy_grid(e, element, data):
     return idx, e0, e1
 
 
-@njit
+@trace.njit()
 def scatter_direction(ux, uy, uz, mu0, azi):
     cos_azi = math.cos(azi)
     sin_azi = math.sin(azi)

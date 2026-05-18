@@ -3,7 +3,7 @@ Surface operations based on the quadric equation:
    f(x,y,z) = Axx + Byy + Czz + Dxy + Exz + Fyz + Gx + Hy + Iz + J
 """
 
-from numba import njit
+import mcdc.trace as trace
 
 ####
 
@@ -47,7 +47,7 @@ from mcdc.constant import (
 from mcdc.transport.util import find_bin_with_rules
 
 
-@njit
+@trace.njit()
 def check_sense(particle_container, speed, surface, data):
     """
     Check on which side of the surface the particle is
@@ -69,7 +69,7 @@ def check_sense(particle_container, speed, surface, data):
     return result > 0.0
 
 
-@njit
+@trace.njit()
 def evaluate(particle_container, surface, data):
     """
     Evaluate the surface equation wrt the particle coordinate
@@ -130,7 +130,7 @@ def evaluate(particle_container, surface, data):
     return result
 
 
-@njit
+@trace.njit()
 def get_normal_component(particle_container, speed, surface, data):
     """
     Get the surface outward-normal component of the particle
@@ -200,7 +200,7 @@ def get_normal_component(particle_container, speed, surface, data):
     return result
 
 
-@njit
+@trace.njit()
 def reflect(particle_container, surface):
     """
     Reflect the particle off the surface
@@ -245,7 +245,7 @@ def reflect(particle_container, surface):
             return torus.reflect(particle_container, surface)
 
 
-@njit
+@trace.njit()
 def get_distance(particle_container, speed, surface, data):
     """
     Get particle distance to surface
@@ -259,7 +259,7 @@ def get_distance(particle_container, speed, surface, data):
         return _get_distance_static(particle_container, surface)
 
 
-@njit
+@trace.njit()
 def _get_distance_static(particle_container, surface):
     """
     Get particle distance to static surface
@@ -310,7 +310,7 @@ def _get_distance_static(particle_container, surface):
             return INF
 
 
-@njit
+@trace.njit()
 def _get_distance_moving(particle_container, speed, surface, data):
     """
     Get particle distance to moving surface
@@ -389,7 +389,7 @@ def _get_distance_moving(particle_container, speed, surface, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def _get_move_idx(t, surface, data):
     """
     Get moving interval index wrt the given time
@@ -411,7 +411,7 @@ def _get_move_idx(t, surface, data):
     return idx
 
 
-@njit
+@trace.njit()
 def _translate_particle_position(particle_container, surface, idx, data):
     """
     Translate particle position wrt the given surface moving interval index
@@ -438,7 +438,7 @@ def _translate_particle_position(particle_container, surface, idx, data):
     particle["z"] -= trans_0[2] + V[2] * t_local
 
 
-@njit
+@trace.njit()
 def _translate_particle_direction(particle_container, speed, surface, idx, data):
     """
     Translate particle direction wrt the given surface moving interval index

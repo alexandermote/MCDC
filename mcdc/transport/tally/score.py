@@ -1,11 +1,8 @@
-from numba import njit
-
-####
-
 import mcdc.mcdc_get as mcdc_get
 import mcdc.transport.mesh as mesh_module
 import mcdc.transport.physics as physics
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.constant import (
     AXIS_T,
@@ -35,7 +32,7 @@ from mcdc.transport.tally.filter import get_filter_indices
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def surface_tally(particle_container, surface, tally, simulation, data):
     particle = particle_container[0]
     tally_base = simulation["tallies"][tally["parent_ID"]]
@@ -80,7 +77,7 @@ def surface_tally(particle_container, surface, tally, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def collision_tally(
     particle_container, collision_data_container, tally, simulation, data
 ):
@@ -140,7 +137,7 @@ def collision_tally(
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def tracklength_tally(particle_container, distance, tally, simulation, data):
     particle = particle_container[0]
     tally_base = simulation["tallies"][tally["parent_ID"]]
@@ -428,7 +425,7 @@ def tracklength_tally(particle_container, distance, tally, simulation, data):
 # =============================================================================
 
 
-@njit
+@trace.njit()
 def eigenvalue_tally(particle_container, distance, simulation, data):
     particle = particle_container[0]
     flux = distance * particle["w"]

@@ -1,7 +1,5 @@
 import math
 
-from numba import njit
-
 ####
 
 import mcdc.mcdc_get as mcdc_get
@@ -10,6 +8,7 @@ import mcdc.transport.particle as particle_module
 import mcdc.transport.particle_bank as particle_bank_module
 import mcdc.transport.rng as rng
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.constant import (
     ANGLE_DISTRIBUTED,
@@ -48,7 +47,7 @@ from mcdc.transport.util import find_bin, linear_interpolation
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def particle_speed(particle_container):
     particle = particle_container[0]
     E = particle["E"]
@@ -56,7 +55,7 @@ def particle_speed(particle_container):
     return LIGHT_SPEED * math.sqrt(E * (E + 2.0 * mass)) / (E + mass)
 
 
-@njit
+@trace.njit()
 def particle_energy_from_speed(speed):
     beta = speed / LIGHT_SPEED
     gamma = 1.0 / math.sqrt(1.0 - beta * beta)
@@ -69,7 +68,7 @@ def particle_energy_from_speed(speed):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     material = simulation["native_materials"][particle["material_ID"]]
@@ -89,7 +88,7 @@ def macro_xs(reaction_type, particle_container, simulation, data):
     return total
 
 
-@njit
+@trace.njit()
 def total_micro_xs(reaction_type, E, nuclide, data):
     idx, E0, E1 = evaluate_neutron_xs_energy_grid(E, nuclide, data)
     if reaction_type == NEUTRON_REACTION_TOTAL:
@@ -114,7 +113,7 @@ def total_micro_xs(reaction_type, E, nuclide, data):
     return linear_interpolation(E, E0, E1, xs0, xs1)
 
 
-@njit
+@trace.njit()
 def reaction_micro_xs(E, reaction_base, nuclide, data):
     idx, E0, E1 = evaluate_neutron_xs_energy_grid(E, nuclide, data)
 
@@ -130,7 +129,7 @@ def reaction_micro_xs(E, reaction_base, nuclide, data):
     return linear_interpolation(E, E0, E1, xs0, xs1)
 
 
-@njit
+@trace.njit()
 def neutron_production_xs(reaction_type, particle_container, simulation, data):
     # Total production
     if reaction_type == NEUTRON_REACTION_TOTAL:
@@ -168,7 +167,7 @@ def neutron_production_xs(reaction_type, particle_container, simulation, data):
         return 0.0
 
 
-@njit
+@trace.njit()
 def _neutron_inelastic_scattering_production_xs(particle_container, simulation, data):
     particle = particle_container[0]
     material_base = simulation["materials"][particle["material_ID"]]
@@ -200,7 +199,7 @@ def _neutron_inelastic_scattering_production_xs(particle_container, simulation, 
     return total
 
 
-@njit
+@trace.njit()
 def _neutron_fission_production_xs(particle_container, simulation, data):
     particle = particle_container[0]
     material_base = simulation["materials"][particle["material_ID"]]
@@ -239,7 +238,7 @@ def _neutron_fission_production_xs(particle_container, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def collision(particle_container, collision_data_container, program, data):
     simulation = util.access_simulation(program)
     particle = particle_container[0]
@@ -443,7 +442,7 @@ def collision(particle_container, collision_data_container, program, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def capture(
     reaction, particle_container, collision_data_container, nuclide, simulation, data
 ):
@@ -467,7 +466,7 @@ def capture(
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def elastic_scattering(
     reaction, particle_container, collision_data_container, nuclide, simulation, data
 ):
@@ -559,7 +558,7 @@ def elastic_scattering(
     collision_data["energy_deposition"] -= particle["E"] * particle["w"]
 
 
-@njit
+@trace.njit()
 def sample_nucleus_velocity(A, particle_container):
     particle = particle_container[0]
 
@@ -612,7 +611,7 @@ def sample_nucleus_velocity(A, particle_container):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def inelastic_scattering(
     reaction, particle_container, collision_data_container, nuclide, program, data
 ):
@@ -763,7 +762,7 @@ def inelastic_scattering(
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def fission(
     reaction, particle_container, collision_data_container, nuclide, program, data
 ):
@@ -975,13 +974,13 @@ def fission(
             particle_bank_module.bank_census_particle(particle_container_new, program)
 
 
-@njit
+@trace.njit()
 def neutron_fission_prompt_multiplicity(E, nuclide, simulation, data):
     data_base = simulation["data"][nuclide["neutron_fission_prompt_multiplicity_ID"]]
     return evaluate_data(E, data_base, simulation, data)
 
 
-@njit
+@trace.njit()
 def neutron_fission_delayed_multiplicity(E, nuclide, simulation, data):
     data_base = simulation["data"][nuclide["neutron_fission_delayed_multiplicity_ID"]]
     return evaluate_data(E, data_base, simulation, data)

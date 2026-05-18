@@ -1,4 +1,4 @@
-from numba import njit
+import mcdc.trace as trace
 
 ####
 
@@ -9,7 +9,7 @@ import mcdc.transport.physics.electron.native as native
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def particle_speed(particle_container, simulation, data):
     return native.particle_speed(particle_container)
 
@@ -19,7 +19,7 @@ def particle_speed(particle_container, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     return native.macro_xs(reaction_type, particle_container, simulation, data)
 
@@ -29,6 +29,6 @@ def macro_xs(reaction_type, particle_container, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def collision(particle_container, collision_data_container, program, data):
     native.collision(particle_container, collision_data_container, program, data)

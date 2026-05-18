@@ -6,7 +6,7 @@ f(x, y, z) = Axx + Byy + Czz + Dxy + Exz + Fyz + Gx + Hy + Iz + J
 
 import math
 
-from numba import njit
+import mcdc.trace as trace
 
 from mcdc.constant import (
     COINCIDENCE_TOLERANCE,
@@ -14,7 +14,7 @@ from mcdc.constant import (
 )
 
 
-@njit
+@trace.njit()
 def evaluate(particle_container, surface):
     particle = particle_container[0]
     # Particle parameters
@@ -48,7 +48,7 @@ def evaluate(particle_container, surface):
     )
 
 
-@njit
+@trace.njit()
 def reflect(particle_container, surface):
     particle = particle_container[0]
     # Particle coordinate
@@ -86,7 +86,7 @@ def reflect(particle_container, surface):
     particle["uz"] -= c * nz
 
 
-@njit
+@trace.njit()
 def get_normal_component(particle_container, surface):
     particle = particle_container[0]
     # Particle coordinate
@@ -120,7 +120,7 @@ def get_normal_component(particle_container, surface):
     return nx * ux + ny * uy + nz * uz
 
 
-@njit
+@trace.njit()
 def get_distance(particle_container, surface):
     particle = particle_container[0]
     # Particle coordinate

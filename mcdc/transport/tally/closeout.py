@@ -1,13 +1,14 @@
 import math
 import numpy as np
 
-from numba import literal_unroll, njit, objmode
+from numba import literal_unroll, objmode
 from mpi4py import MPI
 
 ####
 
 import mcdc.mcdc_set as mcdc_set
 import mcdc.transport.particle_bank as particle_bank_module
+import mcdc.trace as trace
 
 from mcdc.constant import (
     GYRATION_RADIUS_ALL,
@@ -25,13 +26,13 @@ from mcdc.print_ import print_structure
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def reduce(simulation, data):
     for tally in simulation["tallies"]:
         _reduce(tally, simulation, data)
 
 
-@njit
+@trace.njit()
 def _reduce(tally, simulation, data):
     N = tally["bin_length"]
     start = tally["bin_offset"]
@@ -54,13 +55,13 @@ def _reduce(tally, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def accumulate(simulation, data):
     for tally in simulation["tallies"]:
         _accumulate(tally, data)
 
 
-@njit
+@trace.njit()
 def _accumulate(tally, data):
     N_bin = tally["bin_length"]
     offset_bin = tally["bin_offset"]
@@ -90,13 +91,13 @@ def _accumulate(tally, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def finalize(simulation, data):
     for tally in simulation["tallies"]:
         _finalize(tally, simulation, data)
 
 
-@njit
+@trace.njit()
 def _finalize(tally, simulation, data):
     N_history = simulation["settings"]["N_particle"]
     N_batch = simulation["settings"]["N_batch"]
@@ -146,13 +147,13 @@ def _finalize(tally, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def reset_sum_bins(simulation, data):
     for tally in simulation["tallies"]:
         _reset_sum_bins(tally, data)
 
 
-@njit
+@trace.njit()
 def _reset_sum_bins(tally, data):
     N_bin = tally["bin_length"]
     offset_sum = tally["bin_sum_offset"]
@@ -168,7 +169,7 @@ def _reset_sum_bins(tally, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def eigenvalue_cycle(simulation, data):
     idx_cycle = simulation["idx_cycle"]
     N_particle = simulation["settings"]["N_particle"]
@@ -302,7 +303,7 @@ def eigenvalue_cycle(simulation, data):
         mcdc_set.simulation.gyration_radius(idx_cycle, simulation, data, value=rms)
 
 
-@njit
+@trace.njit()
 def eigenvalue_simulation(simulation):
     N = simulation["settings"]["N_active"]
     simulation["n_avg"] /= N

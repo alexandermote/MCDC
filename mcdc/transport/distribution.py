@@ -1,11 +1,10 @@
 import math
 
-from numba import njit
-
 ####
 
 import mcdc.mcdc_get as mcdc_get
 import mcdc.transport.rng as rng
+import mcdc.trace as trace
 
 from mcdc.constant import (
     DISTRIBUTION_EVAPORATION,
@@ -26,17 +25,17 @@ from mcdc.transport.util import find_bin, linear_interpolation
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def sample_distribution(E, distribution, rng_state, simulation, data):
     return _sample_distribution(E, distribution, rng_state, simulation, data, False)
 
 
-@njit
+@trace.njit()
 def sample_distribution_with_scale(E, distribution, rng_state, simulation, data):
     return _sample_distribution(E, distribution, rng_state, simulation, data, True)
 
 
-@njit
+@trace.njit()
 def _sample_distribution(E, distribution, rng_state, simulation, data, scale):
     distribution_type = distribution["child_type"]
     ID = distribution["child_ID"]
@@ -66,14 +65,14 @@ def _sample_distribution(E, distribution, rng_state, simulation, data, scale):
         return -1.0
 
 
-@njit
+@trace.njit()
 def sample_correlated_distribution(E, distribution, rng_state, simulation, data):
     return _sample_correlated_distribution(
         E, distribution, rng_state, simulation, data, False
     )
 
 
-@njit
+@trace.njit()
 def sample_correlated_distribution_with_scale(
     E, distribution, rng_state, simulation, data
 ):
@@ -82,7 +81,7 @@ def sample_correlated_distribution_with_scale(
     )
 
 
-@njit
+@trace.njit()
 def _sample_correlated_distribution(
     E, distribution, rng_state, simulation, data, scale
 ):
@@ -113,17 +112,17 @@ def _sample_correlated_distribution(
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def sample_uniform(low, high, rng_state):
     return low + rng.lcg(rng_state) * (high - low)
 
 
-@njit
+@trace.njit()
 def sample_isotropic_cosine(rng_state):
     return 2.0 * rng.lcg(rng_state) - 1.0
 
 
-@njit
+@trace.njit()
 def sample_isotropic_direction(rng_state):
     # Sample polar cosine and azimuthal angle uniformly
     mu = sample_isotropic_cosine(rng_state)
@@ -137,7 +136,7 @@ def sample_isotropic_direction(rng_state):
     return x, y, z
 
 
-@njit
+@trace.njit()
 def sample_direction(polar_cosine, azimuthal, polar_coordinate, rng_state):
     # Sample polar cosine and azimuthal angle
     mu = sample_uniform(polar_cosine[0], polar_cosine[1], rng_state)
@@ -173,7 +172,7 @@ def sample_direction(polar_cosine, azimuthal, polar_coordinate, rng_state):
     return dx, dy, dz
 
 
-@njit
+@trace.njit()
 def sample_tabulated(table, rng_state, data):
     xi = rng.lcg(rng_state)
 
@@ -190,7 +189,7 @@ def sample_tabulated(table, rng_state, data):
     return linear_interpolation(xi, cdf_low, cdf_high, value_low, value_high)
 
 
-@njit
+@trace.njit()
 def sample_pmf(pmf, rng_state, data):
     xi = rng.lcg(rng_state)
 
@@ -203,7 +202,7 @@ def sample_pmf(pmf, rng_state, data):
     return mcdc_get.pmf_distribution.value(idx, pmf, data)
 
 
-@njit
+@trace.njit()
 def sample_white_direction(nx, ny, nz, rng_state):
     # Sample polar cosine
     mu = math.sqrt(rng.lcg(rng_state))
@@ -233,12 +232,12 @@ def sample_white_direction(nx, ny, nz, rng_state):
     return x, y, z
 
 
-@njit
+@trace.njit()
 def sample_multi_table(E, rng_state, multi_table, data):
     return _sample_multi_table(E, rng_state, multi_table, data, False)
 
 
-@njit
+@trace.njit()
 def _sample_multi_table(E, rng_state, multi_table, data, scale):
     offset = multi_table["grid_offset"]
     length = multi_table["grid_length"]
@@ -338,7 +337,7 @@ def _sample_multi_table(E, rng_state, multi_table, data, scale):
     return val_min + (sample - val_low) / (val_high - val_low) * (val_max - val_min)
 
 
-@njit
+@trace.njit()
 def sample_maxwellian(E, rng_state, maxwellian, simulation, data):
     # Get nuclear temperature
     table = simulation["table_data"][maxwellian["nuclear_temperature_ID"]]
@@ -361,14 +360,14 @@ def sample_maxwellian(E, rng_state, maxwellian, simulation, data):
     return sample
 
 
-@njit
+@trace.njit()
 def sample_level_scattering(E, level_scattering):
     C1 = level_scattering["C1"]
     C2 = level_scattering["C2"]
     return C2 * (E - C1)
 
 
-@njit
+@trace.njit()
 def sample_evaporation(E, rng_state, evaporation, simulation, data):
     # Get nuclear temperature
     table = simulation["table_data"][evaporation["nuclear_temperature_ID"]]
@@ -391,7 +390,7 @@ def sample_evaporation(E, rng_state, evaporation, simulation, data):
     return sample
 
 
-@njit
+@trace.njit()
 def sample_kalbach_mann(E, rng_state, kalbach_mann, data):
     offset = kalbach_mann["energy_offset"]
     length = kalbach_mann["energy_length"]
@@ -499,7 +498,7 @@ def sample_kalbach_mann(E, rng_state, kalbach_mann, data):
     return E_new, mu
 
 
-@njit
+@trace.njit()
 def sample_tabulated_energy_angle(E, rng_state, table, data):
     offset = table["energy_offset"]
     length = table["energy_length"]

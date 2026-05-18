@@ -1,9 +1,9 @@
 import math
 
-from numba import njit
+import mcdc.trace as trace
 
 
-@njit
+@trace.njit()
 def distribute_work(N_work, simulation):
     size = simulation["mpi_size"]
     rank = simulation["mpi_rank"]

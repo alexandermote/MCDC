@@ -1,11 +1,11 @@
 import math
 
-from numba import njit
+import mcdc.trace as trace
 
 from mcdc.constant import COINCIDENCE_TOLERANCE, INF
 
 
-@njit
+@trace.njit()
 def get_indices(particle_container, mesh):
     """
     Get mesh indices given the particle coordinate
@@ -76,7 +76,7 @@ def get_indices(particle_container, mesh):
     return ix, iy, iz
 
 
-@njit
+@trace.njit()
 def get_crossing_distance(particle_container, speed, mesh):
     """
     Get distance for the particle, moving with the given speed,
@@ -124,7 +124,7 @@ def get_crossing_distance(particle_container, speed, mesh):
     return d
 
 
-@njit
+@trace.njit()
 def _grid_index(value, direction, start, width, tolerance):
     """
     Get grid index given the value and the direction
@@ -143,7 +143,7 @@ def _grid_index(value, direction, start, width, tolerance):
     return idx
 
 
-@njit
+@trace.njit()
 def _grid_distance(value, direction, start, width, tolerance):
     """
     Get distance to nearest grid given a value and direction

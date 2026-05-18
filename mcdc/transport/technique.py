@@ -1,8 +1,6 @@
 import numpy as np
 import math
 
-from numba import njit
-
 ####
 
 import mcdc.mcdc_get.weight_windows as ww_get
@@ -11,6 +9,7 @@ import mcdc.transport.particle as particle_module
 import mcdc.transport.particle_bank as particle_bank_module
 import mcdc.transport.rng as rng
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.transport.mesh import get_indices as get_mesh_indices
 
@@ -19,7 +18,7 @@ from mcdc.transport.mesh import get_indices as get_mesh_indices
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def weight_roulette(particle_container, w_threshold, w_target):
     """
     Russian roulette particle if weight is below threshold.
@@ -48,7 +47,7 @@ def weight_roulette(particle_container, w_threshold, w_target):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def global_weight_roulette(particle_container, simulation):
     """
     Russian roulette particle with the global weight roulette parameters.
@@ -70,7 +69,7 @@ def global_weight_roulette(particle_container, simulation):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def weight_windows(particle_container, program, data):
     """
     Apply weight window splitting and rouletting to a particle.
@@ -92,7 +91,7 @@ def weight_windows(particle_container, program, data):
     weight_roulette(particle_container, lower, target)
 
 
-@njit
+@trace.njit()
 def query_weight_window(particle_container, simulation, data):
     """
     Query weight window bounds for the particle.
@@ -125,7 +124,7 @@ def query_weight_window(particle_container, simulation, data):
     return lower, target, upper
 
 
-@njit
+@trace.njit()
 def get_ww_indices(particle_container, ww_obj, simulation, data):
     """
     Get flattened weight window index from particle information
@@ -163,7 +162,7 @@ def get_ww_indices(particle_container, ww_obj, simulation, data):
     return (ie, idx, idy, idz)
 
 
-@njit
+@trace.njit()
 def split_from_weight_window(particle_container, w_upper, w_target, w_lower, program):
     """
     Split a particle if its weight exceeds the threshold.
@@ -211,7 +210,7 @@ def split_from_weight_window(particle_container, w_upper, w_target, w_lower, pro
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def population_control(simulation):
     """Uniform Splitting-Roulette technique"""
 

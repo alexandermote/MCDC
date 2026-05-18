@@ -27,7 +27,7 @@ import math
 
 import numpy as np
 
-from numba import njit
+import mcdc.trace as trace
 
 from mcdc.constant import (
     COINCIDENCE_TOLERANCE,
@@ -35,7 +35,7 @@ from mcdc.constant import (
 )
 
 
-@njit
+@trace.njit()
 def evaluate(particle_container, surface):
     # Particle parameters
     particle = particle_container[0]
@@ -59,7 +59,7 @@ def evaluate(particle_container, surface):
     return q * q - 4.0 * R * R * radial_sq
 
 
-@njit
+@trace.njit()
 def reflect(particle_container, surface):
     particle = particle_container[0]
 
@@ -87,7 +87,7 @@ def reflect(particle_container, surface):
     particle["uz"] -= c * nz
 
 
-@njit
+@trace.njit()
 def get_normal_component(particle_container, surface):
     particle = particle_container[0]
 
@@ -111,7 +111,7 @@ def get_normal_component(particle_container, surface):
     return nx * ux + ny * uy + nz * uz
 
 
-@njit
+@trace.njit()
 def get_distance(particle_container, surface):
     particle = particle_container[0]
 
@@ -192,7 +192,7 @@ def get_distance(particle_container, surface):
     return min_t
 
 
-@njit
+@trace.njit()
 def _get_gradient(x, y, z, surface):
     # Surface coefficients
     R = surface["R"]

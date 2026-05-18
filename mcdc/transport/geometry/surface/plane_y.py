@@ -4,7 +4,7 @@ Plane-Y: Plane perpendicular to the y-axis
 f(y) = y + J
 """
 
-from numba import njit
+import mcdc.trace as trace
 
 from mcdc.constant import (
     COINCIDENCE_TOLERANCE,
@@ -12,25 +12,25 @@ from mcdc.constant import (
 )
 
 
-@njit
+@trace.njit()
 def evaluate(particle_container, surface):
     particle = particle_container[0]
     return particle["y"] + surface["J"]
 
 
-@njit
+@trace.njit()
 def reflect(particle_container, surface):
     particle = particle_container[0]
     particle["uy"] = -particle["uy"]
 
 
-@njit
+@trace.njit()
 def get_normal_component(particle_container, surface):
     particle = particle_container[0]
     return particle["uy"]
 
 
-@njit
+@trace.njit()
 def get_distance(particle_container, surface):
     particle = particle_container[0]
     # Parallel?

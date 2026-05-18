@@ -1,8 +1,6 @@
 import math
 import numpy as np
 
-from numba import njit
-
 ####
 
 import mcdc.mcdc_get as mcdc_get
@@ -11,6 +9,7 @@ import mcdc.transport.particle as particle_module
 import mcdc.transport.particle_bank as particle_bank_module
 import mcdc.transport.rng as rng
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.constant import (
     ELECTRON_CUTOFF_ENERGY,
@@ -39,7 +38,7 @@ from mcdc.transport.util import linear_interpolation
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def particle_speed(particle_container):
     particle = particle_container[0]
     E = particle["E"]
@@ -52,7 +51,7 @@ def particle_speed(particle_container):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     material = simulation["native_materials"][particle["material_ID"]]
@@ -70,7 +69,7 @@ def macro_xs(reaction_type, particle_container, simulation, data):
     return total
 
 
-@njit
+@trace.njit()
 def total_micro_xs(reaction_type, E, element, data):
     idx, E0, E1 = evaluate_electron_xs_energy_grid(E, element, data)
     if reaction_type == ELECTRON_REACTION_TOTAL:
@@ -91,7 +90,7 @@ def total_micro_xs(reaction_type, E, element, data):
     return linear_interpolation(E, E0, E1, xs0, xs1)
 
 
-@njit
+@trace.njit()
 def reaction_micro_xs(E, reaction_base, element, data):
     idx, E0, E1 = evaluate_electron_xs_energy_grid(E, element, data)
 
@@ -112,7 +111,7 @@ def reaction_micro_xs(E, reaction_base, element, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def collision(particle_container, collision_data_container, program, data):
     simulation = util.access_simulation(program)
     particle = particle_container[0]
@@ -262,7 +261,7 @@ def collision(particle_container, collision_data_container, program, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def elastic_scattering(reaction, particle_container, element, simulation, data):
     particle = particle_container[0]
 
@@ -319,7 +318,7 @@ def elastic_scattering(reaction, particle_container, element, simulation, data):
     particle["uz"] = uz_new
 
 
-@njit
+@trace.njit()
 def compute_scattering_eta(E, Z):
     pc = math.sqrt(E * (E + 2.0 * ELECTRON_MASS))
     beta = pc / (E + ELECTRON_MASS)
@@ -334,7 +333,7 @@ def compute_scattering_eta(E, Z):
     return 0.25 * (r * r) * z_sq * bracket * rel
 
 
-@njit
+@trace.njit()
 def sample_small_angle_mu_coulomb(E, Z, rng_state, mu_cut):
     eta = compute_scattering_eta(E, Z)
 
@@ -348,7 +347,7 @@ def sample_small_angle_mu_coulomb(E, Z, rng_state, mu_cut):
     return 1.0 - x
 
 
-@njit
+@trace.njit()
 def elastic_large_xs(E, reaction, simulation, data):
     data_base = simulation["data"][int(reaction["xs_large_ID"])]
     return evaluate_data(E, data_base, simulation, data)
@@ -359,7 +358,7 @@ def elastic_large_xs(E, reaction, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def excitation(
     reaction, particle_container, collision_data_container, simulation, data
 ):
@@ -386,7 +385,7 @@ def excitation(
     collision_data["energy_deposition"] += dE * particle["w"]
 
 
-@njit
+@trace.njit()
 def evaluate_eloss(E, reaction, simulation, data):
     data_base = simulation["data"][int(reaction["eloss_ID"])]
     return evaluate_data(E, data_base, simulation, data)
@@ -397,7 +396,7 @@ def evaluate_eloss(E, reaction, simulation, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def bremsstrahlung(
     reaction, particle_container, collision_data_container, simulation, data
 ):
@@ -426,7 +425,7 @@ def bremsstrahlung(
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def ionization(
     reaction, particle_container, collision_data_container, element, program, data
 ):
@@ -537,7 +536,7 @@ def ionization(
     particle_bank_module.bank_active_particle(particle_container_new, program)
 
 
-@njit
+@trace.njit()
 def compute_mu_delta(T_delta, T_prim):
     pd = math.sqrt(T_delta * (T_delta + 2.0 * ELECTRON_MASS))
     pp = math.sqrt(T_prim * (T_prim + 2.0 * ELECTRON_MASS))
@@ -552,7 +551,7 @@ def compute_mu_delta(T_delta, T_prim):
     return mu
 
 
-@njit
+@trace.njit()
 def sample_delta_direction(T_delta, T_prim, particle_container):
     particle = particle_container[0]
     mu = compute_mu_delta(T_delta, T_prim)

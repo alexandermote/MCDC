@@ -1,6 +1,6 @@
 import numpy as np
 
-from numba import njit, objmode, uint64
+from numba import objmode, uint64
 
 ####
 
@@ -16,6 +16,7 @@ import mcdc.transport.rng as rng
 import mcdc.transport.tally as tally_module
 import mcdc.transport.technique as technique
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.constant import *
 from mcdc.print_ import (
@@ -162,7 +163,7 @@ def eigenvalue_simulation(simulation_container, data):
 # =============================================================================
 
 
-@njit
+@trace.njit()
 def source_loop(seed, simulation, data):
     # Progress bar indicator
     N_prog = 0
@@ -181,7 +182,7 @@ def source_loop(seed, simulation, data):
         source_closeout(simulation, idx_work, N_prog, data)
 
 
-@njit
+@trace.njit()
 def generate_source_particle(work_start, idx_work, seed, program, data):
     """Get a source particle and put into one of the banks"""
     simulation = util.access_simulation(program)
@@ -232,7 +233,7 @@ def generate_source_particle(work_start, idx_work, seed, program, data):
         particle_bank_module.bank_future_particle(particle_container, program)
 
 
-@njit
+@trace.njit()
 def exhaust_active_bank(simulation, data):
     particle_container = util.local_array(1, type_.particle)
     particle = particle_container[0]
@@ -246,7 +247,7 @@ def exhaust_active_bank(simulation, data):
         particle_loop(particle_container, simulation, data)
 
 
-@njit
+@trace.njit()
 def source_closeout(simulation, idx_work, N_prog, data):
     # Tally history closeout for one-batch fixed-source simulation
     if (
@@ -269,7 +270,7 @@ def source_closeout(simulation, idx_work, N_prog, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def particle_loop(particle_container, simulation, data):
     particle = particle_container[0]
 
@@ -277,7 +278,7 @@ def particle_loop(particle_container, simulation, data):
         step_particle(particle_container, simulation, data)
 
 
-@njit
+@trace.njit()
 def step_particle(particle_container, program, data):
     simulation = util.access_simulation(program)
     particle = particle_container[0]
@@ -363,7 +364,7 @@ def step_particle(particle_container, program, data):
         technique.global_weight_roulette(particle_container, simulation)
 
 
-@njit
+@trace.njit()
 def move_to_event(particle_container, simulation, data):
     settings = simulation["settings"]
 

@@ -1,10 +1,7 @@
 import numpy as np
 
 from mpi4py import MPI
-from numba import (
-    njit,
-    objmode,
-)
+from numba import objmode
 
 ####
 
@@ -14,6 +11,7 @@ import mcdc.transport.mpi as mpi
 import mcdc.transport.particle as particle_module
 import mcdc.transport.technique as technique
 import mcdc.transport.util as util
+import mcdc.trace as trace
 
 from mcdc.constant import *
 from mcdc.print_ import print_error
@@ -23,17 +21,17 @@ from mcdc.print_ import print_error
 # =============================================================================
 
 
-@njit
+@trace.njit()
 def get_bank_size(bank):
     return bank["size"][0]
 
 
-@njit
+@trace.njit()
 def set_bank_size(bank, value):
     bank["size"][0] = value
 
 
-@njit
+@trace.njit()
 def add_bank_size(bank, value):
     util.atomic_add(bank["size"], 0, value)
 
@@ -43,7 +41,7 @@ def add_bank_size(bank, value):
 # =============================================================================
 
 
-@njit
+@trace.njit()
 def _bank_particle(particle_container, bank):
     # Check if bank is full
     if get_bank_size(bank) == bank["particle_data"].shape[0]:
@@ -54,7 +52,7 @@ def _bank_particle(particle_container, bank):
     particle_module.copy(bank["particle_data"][idx : idx + 1], particle_container)
 
 
-@njit
+@trace.njit()
 def bank_active_particle(particle_container, program):
     simulation = util.access_simulation(program)
     bank = simulation["bank_active"]
@@ -64,7 +62,7 @@ def bank_active_particle(particle_container, program):
     add_bank_size(bank, 1)
 
 
-@njit
+@trace.njit()
 def bank_census_particle(particle_container, program):
     simulation = util.access_simulation(program)
     bank = simulation["bank_census"]
@@ -74,7 +72,7 @@ def bank_census_particle(particle_container, program):
     add_bank_size(bank, 1)
 
 
-@njit
+@trace.njit()
 def bank_future_particle(particle_container, program):
     simulation = util.access_simulation(program)
     bank = simulation["bank_future"]
@@ -84,7 +82,7 @@ def bank_future_particle(particle_container, program):
     add_bank_size(bank, 1)
 
 
-@njit
+@trace.njit()
 def bank_source_particle(particle_container, simulation):
     bank = simulation["bank_source"]
     _bank_particle(particle_container, bank)
@@ -95,7 +93,7 @@ def bank_source_particle(particle_container, simulation):
     bank["size"][0] += 1
 
 
-@njit
+@trace.njit()
 def pop_particle(particle_container, bank):
     # Check if bank is empty
     if get_bank_size(bank) == 0:
@@ -117,13 +115,13 @@ def pop_particle(particle_container, bank):
     particle["event"] = -1
 
 
-@njit
+@trace.njit()
 def report_full_bank(bank):
     with objmode():
         print_error("Particle %s bank is full." % bank["tag"])
 
 
-@njit
+@trace.njit()
 def report_empty_bank(bank):
     with objmode():
         print_error("Attempting to get a particle from an empty %s bank." % bank["tag"])
@@ -134,7 +132,7 @@ def report_empty_bank(bank):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def promote_future_particles(program, data):
     simulation = util.access_simulation(program)
 
@@ -178,7 +176,7 @@ def promote_future_particles(program, data):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def manage_particle_banks(simulation):
     master = simulation["mpi_master"]
     serial = simulation["mpi_size"] == 1
@@ -239,7 +237,7 @@ def manage_particle_banks(simulation):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def bank_rebalance(simulation):
     # Scan the bank
     idx_start, N_local, N = bank_scanning(simulation["bank_source"], simulation)
@@ -327,7 +325,7 @@ def bank_rebalance(simulation):
 # ======================================================================================
 
 
-@njit
+@trace.njit()
 def bank_scanning(bank, simulation):
     N_local = get_bank_size(bank)
 
@@ -346,7 +344,7 @@ def bank_scanning(bank, simulation):
     return idx_start, N_local, N_global
 
 
-@njit
+@trace.njit()
 def bank_scanning_weight(bank, simulation):
     # Local weight CDF
     N_local = get_bank_size(bank)
@@ -371,7 +369,7 @@ def bank_scanning_weight(bank, simulation):
     return w_start, w_cdf, W_global
 
 
-@njit
+@trace.njit()
 def normalize_weight(bank, norm):
     # Get total weight
     W = total_weight(bank)
@@ -381,7 +379,7 @@ def normalize_weight(bank, norm):
         bank["particle_data"][i]["w"] *= norm / W
 
 
-@njit
+@trace.njit()
 def total_weight(bank):
     # Local total weight
     W_local = np.zeros(1)
@@ -395,7 +393,7 @@ def total_weight(bank):
     return buff[0]
 
 
-@njit
+@trace.njit()
 def total_size(bank):
     # Local total weight
     local_size = np.ones(1, np.int64) * bank["size"]

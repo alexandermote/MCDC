@@ -1,7 +1,9 @@
 import numba as nb
 import numpy as np
 
-from numba import uint64, njit
+from numba import uint64
+
+import mcdc.trace as trace
 
 # ======================================================================================
 # Random number generator
@@ -22,12 +24,12 @@ SEED_SPLIT_PARTICLE = nb.uint64(0)
 SEED_SPLIT_UQ = nb.uint64(0x5368656261)
 
 
-@njit
+@trace.njit()
 def wrapping_mul(a, b):
     return a * b
 
 
-@njit
+@trace.njit()
 def wrapping_add(a, b):
     return a + b
 
@@ -46,7 +48,7 @@ def wrapping_add_python(a, b):
         return a + b
 
 
-@njit
+@trace.njit()
 def split_seed(key, seed):
     """
     murmur_hash64a
@@ -73,13 +75,13 @@ def split_seed(key, seed):
     return hash_value
 
 
-@njit
+@trace.njit()
 def lcg_(seed):
     seed = uint64(seed)
     return wrapping_add(wrapping_mul(RNG_G, seed), RNG_C) & RNG_MOD_MASK
 
 
-@njit
+@trace.njit()
 def lcg(state_container):
     state = state_container[0]
     state["rng_seed"] = lcg_(state["rng_seed"])

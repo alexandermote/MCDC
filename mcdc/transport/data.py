@@ -1,8 +1,5 @@
-from numba import njit
-
-####
-
 import mcdc.mcdc_get as mcdc_get
+import mcdc.trace as trace
 
 from mcdc.constant import (
     DATA_POLYNOMIAL,
@@ -23,7 +20,7 @@ from mcdc.transport.util import (
 )
 
 
-@njit
+@trace.njit()
 def evaluate_data(x, data_base, simulation, data):
     data_type = data_base["child_type"]
     ID = data_base["child_ID"]
@@ -37,7 +34,7 @@ def evaluate_data(x, data_base, simulation, data):
         return 0.0
 
 
-@njit
+@trace.njit()
 def evaluate_table(x, table, data):
     offset = table["x_offset"]
     length = table["x_length"]
@@ -72,7 +69,7 @@ def evaluate_table(x, table, data):
         return log_interpolation(x, x1, x2, y1, y2)
 
 
-@njit
+@trace.njit()
 def evaluate_polynomial(x, polynomial, data):
     offset = polynomial["coefficients_offset"]
     length = polynomial["coefficients_length"]
