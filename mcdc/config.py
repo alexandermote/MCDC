@@ -35,7 +35,7 @@ parser.add_argument("--trace", default=False, action="store_true")
 # Numba
 # ======================================================================================
 
-parser.add_argument("--clear_cache", action="store_true")""
+parser.add_argument("--clear_cache", action="store_true")
 parser.add_argument("--caching", action="store_true", default=False)
 parser.add_argument("--no_caching", dest="caching", action="store_false")
 
