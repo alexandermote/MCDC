@@ -10,7 +10,7 @@ import numpy as np
 
 ####
 
-import mcdc.config as config
+from mcdc.config import trace
 
 #from mcdc.transport.util import atomic_add
 
@@ -37,7 +37,7 @@ def extern_gpu_clock_rate():
     return 1000000000
 
 
-if config.trace:
+if trace:
     if not os.path.exists(CACHE_PATH):
         os.makedirs(CACHE_PATH)
     base_path = f"{CACHE_PATH}/trace"
