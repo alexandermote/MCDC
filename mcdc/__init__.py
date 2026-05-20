@@ -3,7 +3,7 @@
 # ======================================================================================
 
 # Function profiler
-import mcdc.trace
+#import mcdc.trace
 
 # The simulation
 from mcdc.object_.simulation import simulation
