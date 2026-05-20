@@ -1,9 +1,10 @@
 import mcdc.transport.physics as physics
 import mcdc.transport.rng as rng
-import mcdc.trace as trace
+
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def move(particle_container, distance, simulation, data):
     particle = particle_container[0]
     ut = 1.0 / physics.particle_speed(particle_container, simulation, data)
@@ -14,7 +15,7 @@ def move(particle_container, distance, simulation, data):
     particle["t"] += ut * distance
 
 
-@trace.njit()
+@njit()
 def copy(target_particle_container, source_particle_container):
     target_particle = target_particle_container[0]
     source_particle = source_particle_container[0]
@@ -33,7 +34,7 @@ def copy(target_particle_container, source_particle_container):
     target_particle["rng_seed"] = source_particle["rng_seed"]
 
 
-@trace.njit()
+@njit()
 def copy_as_child(child_particle_container, parent_particle_container):
     parent_particle = parent_particle_container[0]
     child_particle = child_particle_container[0]

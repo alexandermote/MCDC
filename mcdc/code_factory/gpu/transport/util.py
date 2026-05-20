@@ -2,10 +2,11 @@ import harmonize
 import numba as nb
 import numpy as np
 
-from numba import njit, types
+from numba import types
+from mcdc.trace import njit
 
 
-@njit
+@njit()
 def atomic_add(array, idx, value):
     harmonize.array_atomic_add(array, idx, value)
 

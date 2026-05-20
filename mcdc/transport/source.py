@@ -1,7 +1,6 @@
 from mcdc.constant import COINCIDENCE_TOLERANCE, COINCIDENCE_TOLERANCE_TIME
 import mcdc.mcdc_get as mcdc_get
 import mcdc.transport.rng as rng
-import mcdc.trace as trace
 
 from mcdc.transport.distribution import (
     sample_uniform,
@@ -12,9 +11,10 @@ from mcdc.transport.distribution import (
     sample_direction,
 )
 from mcdc.transport.util import find_bin_with_rules
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def source_particle(particle_container, seed, simulation, data):
     particle = particle_container[0]
     particle["rng_seed"] = seed

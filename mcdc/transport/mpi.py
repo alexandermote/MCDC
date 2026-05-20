@@ -1,9 +1,9 @@
 import math
 
-import mcdc.trace as trace
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def distribute_work(N_work, simulation):
     size = simulation["mpi_size"]
     rank = simulation["mpi_rank"]

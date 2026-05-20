@@ -1,14 +1,14 @@
 import mcdc.transport.physics.neutron.multigroup as multigroup
 import mcdc.transport.physics.neutron.native as native
 import mcdc.transport.util as util
-import mcdc.trace as trace
+from mcdc.trace import njit
 
 # ======================================================================================
 # Particle attributes
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def particle_speed(particle_container, simulation, data):
     if simulation["settings"]["neutron_multigroup_mode"]:
         return multigroup.particle_speed(particle_container, simulation, data)
@@ -21,7 +21,7 @@ def particle_speed(particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     if simulation["settings"]["neutron_multigroup_mode"]:
         return multigroup.macro_xs(reaction_type, particle_container, simulation, data)
@@ -29,7 +29,7 @@ def macro_xs(reaction_type, particle_container, simulation, data):
         return native.macro_xs(reaction_type, particle_container, simulation, data)
 
 
-@trace.njit()
+@njit()
 def neutron_production_xs(reaction_type, particle_container, simulation, data):
     if simulation["settings"]["neutron_multigroup_mode"]:
         return multigroup.neutron_production_xs(
@@ -46,7 +46,7 @@ def neutron_production_xs(reaction_type, particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def collision(particle_container, collision_data_container, program, data):
     simulation = util.access_simulation(program)
 

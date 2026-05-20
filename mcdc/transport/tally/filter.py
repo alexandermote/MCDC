@@ -6,7 +6,6 @@ from numba import literal_unroll
 
 import mcdc.mcdc_get as mcdc_get
 import mcdc.mcdc_set as mcdc_set
-import mcdc.trace as trace
 
 from mcdc.constant import (
     COINCIDENCE_TOLERANCE_DIRECTION,
@@ -14,9 +13,10 @@ from mcdc.constant import (
     COINCIDENCE_TOLERANCE_TIME,
 )
 from mcdc.transport.util import find_bin_with_tolerance, find_bin_with_rules
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def get_filter_indices(particle_container, tally, data, MG_mode):
     i_mu, i_azi, i_energy, i_time = 0, 0, 0, 0
 
@@ -32,7 +32,7 @@ def get_filter_indices(particle_container, tally, data, MG_mode):
     return i_mu, i_azi, i_energy, i_time
 
 
-@trace.njit()
+@njit()
 def get_direction_index(particle_container, tally, data):
     particle = particle_container[0]
 
@@ -67,7 +67,7 @@ def get_direction_index(particle_container, tally, data):
     return i_mu, i_azi
 
 
-@trace.njit()
+@njit()
 def get_energy_index(particle_container, tally, data, neutron_multigroup_mode):
     particle = particle_container[0]
 
@@ -85,7 +85,7 @@ def get_energy_index(particle_container, tally, data, neutron_multigroup_mode):
     return find_bin_with_tolerance(E, grid_energy, tolerance)
 
 
-@trace.njit()
+@njit()
 def get_time_index(particle_container, tally, data):
     particle = particle_container[0]
 
@@ -102,7 +102,7 @@ def get_time_index(particle_container, tally, data):
     return find_bin_with_rules(time, grid_time, tolerance, go_lower)
 
 
-@trace.njit()
+@njit()
 def set_census_based_time_grid(simulation, data):
     settings = simulation["settings"]
     tally_frequency = settings["census_tally_frequency"]

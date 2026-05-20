@@ -2,10 +2,10 @@ import mcdc.mcdc_get as mcdc_get
 
 from mcdc.constant import COINCIDENCE_TOLERANCE, COINCIDENCE_TOLERANCE_TIME, INF
 from mcdc.transport.util import find_bin_with_rules
-import mcdc.trace as trace
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def get_indices(particle_container, mesh, data):
     """
     Get mesh indices given the particle coordinate
@@ -39,7 +39,7 @@ def get_indices(particle_container, mesh, data):
     return ix, iy, iz
 
 
-@trace.njit()
+@njit()
 def get_crossing_distance(particle_arr, speed, mesh):
     """
     Get distance for the particle, moving with the given speed,
@@ -78,7 +78,7 @@ def get_crossing_distance(particle_arr, speed, mesh):
     return d
 
 
-@trace.njit()
+@njit()
 def _grid_distance(value, direction, grid, length, tolerance):
     """
     Get distance to nearest grid given a value and direction

@@ -9,7 +9,6 @@ import mcdc.transport.particle as particle_module
 import mcdc.transport.particle_bank as particle_bank_module
 import mcdc.transport.rng as rng
 import mcdc.transport.util as util
-import mcdc.trace as trace
 
 from mcdc.constant import (
     PI,
@@ -22,13 +21,14 @@ from mcdc.constant import (
 )
 from mcdc.transport.physics.util import scatter_direction
 from mcdc.transport.distribution import sample_isotropic_direction
+from mcdc.trace import njit
 
 # ======================================================================================
 # Particle attributes
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def particle_speed(particle_container, simulation, data):
     particle = particle_container[0]
     material = simulation["multigroup_materials"][particle["material_ID"]]
@@ -40,7 +40,7 @@ def particle_speed(particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     material = simulation["multigroup_materials"][particle["material_ID"]]
@@ -57,7 +57,7 @@ def macro_xs(reaction_type, particle_container, simulation, data):
     return 0.0
 
 
-@trace.njit()
+@njit()
 def neutron_production_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     material = simulation["multigroup_materials"][particle["material_ID"]]
@@ -115,7 +115,7 @@ def neutron_production_xs(reaction_type, particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def collision(particle_container, collision_data_container, program, data):
     simulation = util.access_simulation(program)
     particle = particle_container[0]
@@ -151,7 +151,7 @@ def collision(particle_container, collision_data_container, program, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def scattering(particle_container, program, data):
     simulation = util.access_simulation(program)
 
@@ -231,7 +231,7 @@ def scattering(particle_container, program, data):
             particle_bank_module.bank_active_particle(particle_container_new, program)
 
 
-@trace.njit()
+@njit()
 def fission(particle_container, program, data):
     simulation = util.access_simulation(program)
     settings = simulation["settings"]

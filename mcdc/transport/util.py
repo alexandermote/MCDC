@@ -3,10 +3,10 @@ import numpy as np
 
 from typing import Sequence
 
-import mcdc.trace as trace
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def find_bin_with_rules(value, grid, epsilon, go_lower):
     """
     Return the bin index i for which grid[i] <= value < grid[i+1], with optional
@@ -95,14 +95,14 @@ def find_bin_with_rules(value, grid, epsilon, go_lower):
     return idx
 
 
-@trace.njit()
+@njit()
 def find_bin(value, grid):
     tolerance = 0.0
     go_lower = True
     return find_bin_with_rules(value, grid, tolerance, go_lower)
 
 
-@trace.njit()
+@njit()
 def find_bin_with_tolerance(value, grid, tolerance):
     go_lower = True
     return find_bin_with_rules(value, grid, tolerance, go_lower)
@@ -114,34 +114,34 @@ def find_bin_with_tolerance(value, grid, tolerance):
 
 
 # INT = 1: histogram
-@trace.njit()
+@njit()
 def histogram_interpolation(x, x1, x2, y1, y2):
     return y1
 
 
 # INT = 2: linear-linear
-@trace.njit()
+@njit()
 def linear_interpolation(x, x1, x2, y1, y2):
     return y1 + (x - x1) * (y2 - y1) / (x2 - x1)
 
 
 # INT = 3: linear-log / semilogx
 # linear in log(x), linear in y
-@trace.njit()
+@njit()
 def semilogx_interpolation(x, x1, x2, y1, y2):
     return y1 + (math.log(x) - math.log(x1)) * (y2 - y1) / (math.log(x2) - math.log(x1))
 
 
 # INT = 4: log-linear / semilogy
 # linear in x, linear in log(y)
-@trace.njit()
+@njit()
 def semilogy_interpolation(x, x1, x2, y1, y2):
     return y1 * (y2 / y1) ** ((x - x1) / (x2 - x1))
 
 
 # INT = 5: log-log
 # linear in log(x), linear in log(y)
-@trace.njit()
+@njit()
 def log_interpolation(x, x1, x2, y1, y2):
     m = math.log(y2 / y1) / math.log(x2 / x1)
     return y1 * (x / x1) ** m
@@ -152,16 +152,16 @@ def log_interpolation(x, x1, x2, y1, y2):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def atomic_add(array, idx, value):
     array[idx] += value
 
 
-@trace.njit()
+@njit()
 def local_array(shape, dtype):
     return np.zeros(shape, dtype=dtype)
 
 
-@trace.njit()
+@njit()
 def access_simulation(program):
     return program

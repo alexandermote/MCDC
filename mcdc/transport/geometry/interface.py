@@ -9,17 +9,17 @@ import mcdc.transport.mesh as mesh
 import mcdc.transport.physics as physics
 import mcdc.transport.tally as tally_module
 import mcdc.transport.util as util
-import mcdc.trace as trace
 
 from mcdc.constant import *
 from mcdc.transport.geometry.surface import get_distance, check_sense, reflect
+from mcdc.trace import njit
 
 # ======================================================================================
 # Geometry inspection
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def inspect_geometry(particle_container, simulation, data):
     """
     Full geometry inspection of the particle:
@@ -164,7 +164,7 @@ def inspect_geometry(particle_container, simulation, data):
     return distance
 
 
-@trace.njit()
+@njit()
 def locate_particle(particle_container, simulation, data):
     """
     Set particle cell and material IDs
@@ -267,7 +267,7 @@ def locate_particle(particle_container, simulation, data):
     return not particle_is_lost
 
 
-@trace.njit()
+@njit()
 def _rotate_particle(particle_container, rotation):
     # Particle initial coordinate
     particle = particle_container[0]
@@ -298,7 +298,7 @@ def _rotate_particle(particle_container, rotation):
     particle["uz"] = uz_rotated
 
 
-@trace.njit()
+@njit()
 def _rotation_matrix(rotation):
     phi = rotation[0]
     theta = rotation[1]
@@ -328,7 +328,7 @@ def _rotation_matrix(rotation):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def get_cell(particle_container, universe_ID, simulation, data):
     """
     Find and return particle cell ID in the given universe
@@ -348,7 +348,7 @@ def get_cell(particle_container, universe_ID, simulation, data):
     return -1
 
 
-@trace.njit()
+@njit()
 def check_cell(particle_container, cell, simulation, data):
     """
     Check if the particle is inside the cell
@@ -390,7 +390,7 @@ def check_cell(particle_container, cell, simulation, data):
     return value[0]
 
 
-@trace.njit()
+@njit()
 def report_lost_particle(particle_container, simulation):
     """
     Report lost particle and terminate it
@@ -414,7 +414,7 @@ def report_lost_particle(particle_container, simulation):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def distance_to_nearest_surface(particle_container, cell, simulation, data):
     """
     Determine the nearest cell surface and the distance to it
@@ -437,7 +437,7 @@ def distance_to_nearest_surface(particle_container, cell, simulation, data):
     return distance, surface_ID
 
 
-@trace.njit()
+@njit()
 def surface_crossing(P_arr, simulation, data):
     P = P_arr[0]
 
@@ -466,7 +466,7 @@ def surface_crossing(P_arr, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def check_coincidence(value_1, value_2):
     """
     Check if two values are within coincidence tolerance

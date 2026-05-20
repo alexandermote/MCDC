@@ -2,10 +2,10 @@ from mcdc import mcdc_get
 from mcdc.constant import MESH_STRUCTURED, MESH_UNIFORM
 import mcdc.transport.mesh.structured as structured
 import mcdc.transport.mesh.uniform as uniform
-import mcdc.trace as trace
+from mcdc.trace import njit
 
 
-@trace.njit()
+@njit()
 def get_indices(particle_container, mesh_base, simulation, data):
     mesh_type = mesh_base["child_type"]
     mesh_ID = mesh_base["child_ID"]
@@ -20,7 +20,7 @@ def get_indices(particle_container, mesh_base, simulation, data):
     return -1, -1, -1
 
 
-@trace.njit()
+@njit()
 def get_x(index, mesh_base, simulation, data):
     mesh_type = mesh_base["child_type"]
     mesh_ID = mesh_base["child_ID"]
@@ -34,7 +34,7 @@ def get_x(index, mesh_base, simulation, data):
     return 0.0
 
 
-@trace.njit()
+@njit()
 def get_y(index, mesh_base, simulation, data):
     mesh_type = mesh_base["child_type"]
     mesh_ID = mesh_base["child_ID"]
@@ -48,7 +48,7 @@ def get_y(index, mesh_base, simulation, data):
     return 0.0
 
 
-@trace.njit()
+@njit()
 def get_z(index, mesh_base, simulation, data):
     mesh_type = mesh_base["child_type"]
     mesh_ID = mesh_base["child_ID"]

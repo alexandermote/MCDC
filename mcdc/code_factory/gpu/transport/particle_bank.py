@@ -1,20 +1,17 @@
-from numba import njit
-
-###
-
 import mcdc.numba_types as type_
 import mcdc.transport.particle as particle_module
 import mcdc.transport.util as util
 import mcdc.code_factory.gpu.program_builder as gpu_program
 
 from mcdc.constant import GPU_ASYNC_SIMPLE
+from mcdc.trace import njit
 
 # =============================================================================
 # Bank and pop particle
 # =============================================================================
 
 
-@njit
+@njit()
 def bank_active_particle(particle_container, program):
     simulation = util.access_simulation(program)
 
@@ -28,11 +25,11 @@ def bank_active_particle(particle_container, program):
     """
 
 
-@njit
+@njit()
 def report_full_bank(bank):
     pass
 
 
-@njit
+@njit()
 def report_empty_bank(bank):
     pass

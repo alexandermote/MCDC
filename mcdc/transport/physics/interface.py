@@ -5,16 +5,16 @@ import math
 import mcdc.transport.rng as rng
 import mcdc.transport.physics.electron as electron
 import mcdc.transport.physics.neutron as neutron
-import mcdc.trace as trace
 
 from mcdc.constant import *
+from mcdc.trace import njit
 
 # ======================================================================================
 # Particle attributes
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def particle_speed(particle_container, simulation, data):
     particle = particle_container[0]
     if particle["particle_type"] == PARTICLE_NEUTRON:
@@ -29,7 +29,7 @@ def particle_speed(particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def macro_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     if particle["particle_type"] == PARTICLE_NEUTRON:
@@ -39,7 +39,7 @@ def macro_xs(reaction_type, particle_container, simulation, data):
     return -1.0
 
 
-@trace.njit()
+@njit()
 def neutron_production_xs(reaction_type, particle_container, simulation, data):
     particle = particle_container[0]
     if particle["particle_type"] == PARTICLE_NEUTRON:
@@ -54,7 +54,7 @@ def neutron_production_xs(reaction_type, particle_container, simulation, data):
 # ======================================================================================
 
 
-@trace.njit()
+@njit()
 def collision_distance(particle_container, simulation, data):
     particle = particle_container[0]
 
@@ -75,7 +75,7 @@ def collision_distance(particle_container, simulation, data):
     return distance
 
 
-@trace.njit()
+@njit()
 def collision(particle_container, collision_data_container, program, data):
     particle = particle_container[0]
 

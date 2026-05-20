@@ -1,7 +1,5 @@
 import harmonize
 
-from numba import njit
-
 ###
 
 import mcdc.code_factory.gpu.program_builder as gpu_module
@@ -10,11 +8,12 @@ import mcdc.transport.particle_bank as particle_bank_module
 
 from mcdc.constant import GPU_STORAGE_SEPARATE, GPU_STRATEGY_ASYNC
 from mcdc.transport.simulation import source_closeout
+from mcdc.trace import njit
 
 caching = config.caching
 
 
-@njit(cache=caching)
+@njit()(cache=caching)
 def source_loop(seed, simulation, data):
     # For async execution
     iter_count = 655360000
