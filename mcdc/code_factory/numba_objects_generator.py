@@ -16,7 +16,6 @@ import mcdc
 import mcdc.code_factory.gpu.program_builder as gpu_builder
 import mcdc.config as config
 import mcdc.object_ as object_module
-import mcdc.object_.base as base
 
 from mcdc.trace import njit
 from mcdc.object_.base import (
@@ -48,6 +47,8 @@ bank_names = ["bank_active", "bank_census", "bank_source", "bank_future"]
 # ======================================================================================
 # Gather and group the classes
 # ======================================================================================
+
+import mcdc.object_.base as base
 
 base_classes = [
     getattr(base, x)
