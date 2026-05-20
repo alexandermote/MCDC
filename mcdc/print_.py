@@ -11,8 +11,6 @@ import sys
 
 from colorama import Fore, Style
 
-import mcdc.mcdc_get as mcdc_get
-
 
 def print_1d_array(arr):
     N = len(arr)
@@ -179,6 +177,8 @@ def print_header_batch(i, N):
         print(f"\nBatch {i+1}/{N}")
         sys.stdout.flush()
 
+
+import mcdc.mcdc_get as mcdc_get
 
 def print_progress_eigenvalue(simulation, data):
     if master:
